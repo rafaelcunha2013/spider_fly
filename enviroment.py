@@ -5,13 +5,14 @@ import os
 class SpiderFly2D:
 
     def __init__(self, spiders, flies, max_steps=50, render_mode=False, size=12,
-                 name='test.txt'):
+                 name='test.txt', print_li = False):
         self.spiders = spiders
         self.flies = flies
         self.max_steps = max_steps
         self.render_mode = render_mode
         self.size = size
         self.name = name
+        self.print_li = print_li
         
         self.grid = np.array(['___']*size, dtype='U3')
         self.steps = 0
@@ -92,7 +93,8 @@ class SpiderFly2D:
             message = '   '.join(self.grid) + "\n"
             file.write(message)
             # file.write(print('   '.join(self.grid)))
-            # print('   '.join(self.grid))
+        if self.print_li:
+            print('   '.join(self.grid))
 
 
     

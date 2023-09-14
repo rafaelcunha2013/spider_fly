@@ -21,8 +21,9 @@ eps_min = 0.01
 eps_max = 1.
 
 plt.ion() # Turn interactive mode on.
-epochs = 50
+epochs = 500
 algorithm = 'iql'
+print_li = False
 
 if algorithm == 'q-learning':
     ################################
@@ -38,9 +39,9 @@ if algorithm == 'iql':
     ################################
     ###### Double agent ############
     spiders = (Spider(round(state_len/2), 'Sp1'), Spider(round(state_len/2) + 1, 'Sp2'))
-    file_name = 'double00'
+    file_name = 'double01'
     env = SpiderFly2D(spiders, flies, render_mode=render, size=state_len, max_steps=300, name=file_name)
     agents = (Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=0.5, gamma=0.99),
             Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=0.5, gamma=0.99))
     train(epochs, env, agents, "iql")
-    plt.savefig('double_agent1.png')
+    plt.savefig(os.path.join('.', 'fig', 'double_agent4.png'))

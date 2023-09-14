@@ -68,7 +68,7 @@ def run_trained(agent, env_test, algorithm):
     for _ in range(epochs):
 
         state, _ = env_test.reset()
-        state = convert(state, agent[0].state_len, env_test)
+        # state = convert(state, agent[0].state_len, env_test)
         if env_test.render_mode:
             env_test.render()
 
@@ -78,13 +78,13 @@ def run_trained(agent, env_test, algorithm):
         while not terminated and not truncated:
             
             # action1 = agent.select_action(state)
-            action = compute_action(state, agent, algorithm)
+            action = compute_action(state, agent, algorithm, env_test)
 
             # action = (action1,)
             next_state, reward, terminated, truncated, _ = env_test.step(action)
-            next_state = convert(next_state, agent[0].state_len, env_test)
+            # next_state = convert(next_state, agent[0].state_len, env_test)
 
-            state = next_state
+            state = next_state.copy()
 
             if env_test.render_mode:
                 env_test.render()
@@ -93,25 +93,44 @@ def run_trained(agent, env_test, algorithm):
 
     return env_test.steps
 
-def compute_action(state, agents, algorithm):
+def compute_action(state, agents, algorithm, env):
     # return [agent.select_action(state) for agent in agents]
     if algorithm == "q-learning":
         state = convert(state, agents[0].state_len, env)
         return (agents[0].select_action(state), )
     
     if algorithm == "iql":
-        return [agent.select_action(state) for agent in agents]
+        flies_position = state[:2]
+        actions = []
+        for agent, spider in zip(agents, env.spiders):
+            state = np.append(flies_position, spider.position)
+            state = convert(state, agents[0].state_len, env)
+            actions.append(agent.select_action(state))
+
+        return actions
 
 
-def compute_transition(state, action, reward, next_state, terminated, algorithm):
+def compute_transition(state, actions, reward, next_state, terminated, algorithm, agents, env):
     if algorithm == "q-learning":
-        transitions = state, int(action[0] + 1), reward, next_state, terminated
+        state = convert(state, agents[0].state_len, env)
+        next_state = convert(next_state, agents[0].state_len, env)
+        transitions = state, int(actions[0] + 1), reward, next_state, terminated
         return (transitions,)
 
     if algorithm == "iql":
-        transition1 = state, int(action[0] + 1), reward, next_state, terminated
-        transition2 = state, int(action[1] + 1), reward, next_state, terminated
-        return (transition1, transition2)
+        flies_position_st = state[:2]
+        flies_position_next_st = next_state[:2]
+        transitions = []
+        for spider, action in zip(env.spiders, actions):
+            state = np.append(flies_position_st, spider.position)
+            state = convert(state, agents[0].state_len, env)
+            next_state = np.append(flies_position_next_st, spider.position)
+            next_state = convert(next_state, agents[0].state_len, env)
+
+            transition = state, int(action + 1), reward, next_state, terminated
+            transitions.append(transition)
+        # transition2 = state, int(action[1] + 1), reward, next_state, terminated
+        return transitions #(transition1, transition2)
 
 def train(epochs, env, agents, algorithm):
     n_steps = []
@@ -145,18 +164,18 @@ def train(epochs, env, agents, algorithm):
 
         while not terminated and not truncated:
             
-            action = compute_action(state, agents, algorithm)
+            action = compute_action(state, agents, algorithm, env)
 
             next_state, reward, terminated, truncated, _ = env.step(action)
-            next_state = convert(next_state, agents[0].state_len, env)
+            # next_state = convert(next_state, agents[0].state_len, env)
 
-            transitions = compute_transition(state, action, reward, next_state, terminated, algorithm)
+            transitions = compute_transition(state, action, reward, next_state, terminated, algorithm, agents, env)
 
             for agent, transition in zip(agents, transitions):
                 agent.update_q(transition)
 
 
-            state = next_state
+            state = next_state.copy()
             #cum_rew += reward
             # print(next_state)
             if env.render_mode:
