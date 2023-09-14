@@ -96,6 +96,7 @@ def run_trained(agent, env_test, algorithm):
 def compute_action(state, agents, algorithm):
     # return [agent.select_action(state) for agent in agents]
     if algorithm == "q-learning":
+        state = convert(state, agents[0].state_len, env)
         return (agents[0].select_action(state), )
     
     if algorithm == "iql":
@@ -109,7 +110,7 @@ def compute_transition(state, action, reward, next_state, terminated, algorithm)
 
     if algorithm == "iql":
         transition1 = state, int(action[0] + 1), reward, next_state, terminated
-        transition2 = state, action_dict(action[1]), reward, convert(next_state), terminated
+        transition2 = state, int(action[1] + 1), reward, next_state, terminated
         return (transition1, transition2)
 
 def train(epochs, env, agents, algorithm):
@@ -133,7 +134,7 @@ def train(epochs, env, agents, algorithm):
         # cum_rew = 0
 
         state, _ = env.reset()
-        state = convert(state, agents[0].state_len, env)
+        # state = convert(state, agents[0].state_len, env)
 
         # print(state)
         if env.render_mode:

@@ -6,10 +6,14 @@ from utilities import convert, run_trained, plot_graphs3, train
 import numpy as np
 import matplotlib.pyplot as plt
 import copy
+import os
 
 ################################
 ### Main parameters ############
 state_len = 6
+fly1 = Fly(0, 'F1 ')
+fly2 = Fly(state_len-1, 'F2 ')
+flies = (fly1, fly2)
 render = True
 action_len = 3
 eps_decay = 200000.
@@ -23,18 +27,12 @@ algorithm = 'iql'
 if algorithm == 'q-learning':
     ################################
     ### Environment parameters #####
-    fly1 = Fly(0, 'F1 ')
-    fly2 = Fly(state_len-1, 'F2 ')
-    spd1 = Spider(round(state_len/2), 'Sp1')
-    spiders = (spd1,)
-    flies = (fly1, fly2)
-    file_name = 'single3'
+    spiders = (Spider(round(state_len/2), 'Sp1'),)
+    file_name = 'single4'
     env = SpiderFly2D(spiders, flies, render_mode=render, size=state_len, max_steps=300, name=file_name)
-    #####################################
-    ### Agent parameters ################
     agent1 = Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=0.5, gamma=0.99)
     train(epochs, env, (agent1, ), algorithm)
-    plt.savefig('single_agent1.png')
+    plt.savefig(os.path.join('.', 'fig', 'single_agent4.png'))
 
 if algorithm == 'iql':
     ################################

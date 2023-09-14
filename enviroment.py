@@ -1,5 +1,6 @@
 import numpy as np
 import copy
+import os
 
 class SpiderFly2D:
 
@@ -52,7 +53,7 @@ class SpiderFly2D:
             self.update_grid()
         self.steps = 0
 
-        with open(self.name + '.txt', 'a') as file:
+        with open(os.path.join('.', 'history', self.name + '.txt'), 'a') as file:
             # Write data to the file
             file.write("\n\n")
 
@@ -60,9 +61,10 @@ class SpiderFly2D:
     
     def step(self, action):
         reward = 0
-        for i, spider in enumerate(self.spiders):
+        for spider, ind_action in zip(self.spiders, action):
+        # for i, spider in enumerate(self.spiders):
             old_position = copy.deepcopy(spider.position)
-            spider.move(action[i])
+            spider.move(ind_action)
             if spider.position == len(self.grid) or spider.position == -1:
                 spider.position = copy.deepcopy(old_position)
 
@@ -85,7 +87,7 @@ class SpiderFly2D:
 
     def render(self):
         # print(self.grid)
-        with open(self.name + '.txt', 'a') as file:
+        with open(os.path.join('.', 'history', self.name + '.txt'), 'a') as file:
             # Write data to the file
             message = '   '.join(self.grid) + "\n"
             file.write(message)
