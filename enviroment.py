@@ -25,6 +25,7 @@ class SpiderFly2D:
                 str(np.array([flies[0].position, -1])) : 2,
                 str(np.array([-1, -1])): 3
         }
+        self.trajectories = []
 
     def update_grid(self):
         self.grid = np.array(['___']*self.size, dtype='U3')
@@ -54,16 +55,13 @@ class SpiderFly2D:
             self.update_grid()
         self.steps = 0
 
-        with open(os.path.join('.', 'history', self.name + '.txt'), 'a') as file:
-            # Write data to the file
-            file.write("\n\n")
+        self.trajectories.append("\n\n")
 
         return self.state, {}
     
     def step(self, action):
         reward = 0
         for spider, ind_action in zip(self.spiders, action):
-        # for i, spider in enumerate(self.spiders):
             old_position = copy.deepcopy(spider.position)
             spider.move(ind_action)
             if spider.position == len(self.grid) or spider.position == -1:
@@ -87,12 +85,7 @@ class SpiderFly2D:
         return self.state, reward, terminated, truncated, {}
 
     def render(self):
-        # print(self.grid)
-        with open(os.path.join('.', 'history', self.name + '.txt'), 'a') as file:
-            # Write data to the file
-            message = '   '.join(self.grid) + "\n"
-            file.write(message)
-            # file.write(print('   '.join(self.grid)))
+        self.trajectories.append('   '.join(self.grid) + "\n")
         if self.print_li:
             print('   '.join(self.grid))
 

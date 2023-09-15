@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import copy
 import os
+from datetime import datetime
 
 ################################
 ### Main parameters ############
@@ -25,24 +26,27 @@ plt.ion() if iteractive else None # Turn iteractive mode on.
 epochs = 50
 algorithm = 'q-learning'
 print_li = False
+unique_id = datetime.now().strftime("%m_%d__%H_%M_%S__%f")[:-4]
+file_name = f'{algorithm}_{unique_id}_' 
 
 if algorithm == 'q-learning':
     ################################
     ### Environment parameters #####
-    spiders = (Spider(round(state_len/2), 'Sp1'),)
-    file_name = 'single4'
-    env = SpiderFly2D(spiders, flies, render_mode=render, size=state_len, max_steps=300, name=file_name)
-    agent1 = Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=0.5, gamma=0.99)
-    train(epochs, env, (agent1, ), algorithm, iteractive=iteractive)
-    plt.savefig(os.path.join('.', 'fig', 'single_agent5.png'))
+    spiders = (Spider(round(state_len/2), 'Sp1'), )
+    agents = (Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=0.5, gamma=0.99), )
 
 if algorithm == 'iql':
     ################################
     ###### Double agent ############
     spiders = (Spider(round(state_len/2), 'Sp1'), Spider(round(state_len/2) + 1, 'Sp2'))
-    file_name = 'double01'
-    env = SpiderFly2D(spiders, flies, render_mode=render, size=state_len, max_steps=300, name=file_name)
     agents = (Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=0.5, gamma=0.99),
             Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=0.5, gamma=0.99))
-    train(epochs, env, agents, "iql", iteractive=iteractive)
-    plt.savefig(os.path.join('.', 'fig', 'double_agent4.png'))
+
+env = SpiderFly2D(spiders, flies, render_mode=render, size=state_len, max_steps=300, name=file_name)
+train(epochs, env, agents, algorithm, iteractive=iteractive)
+
+# # Save Informations after running
+# with open(os.path.join('.', 'history', file_name + '.txt'), 'a') as file:
+#     for trajectory in env.trajectories:
+#         file.write(trajectory)
+# plt.savefig(os.path.join('.', 'fig', file_name + '.png'))

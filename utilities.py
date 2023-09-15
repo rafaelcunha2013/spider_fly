@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import copy
+import os
 
 from agent import Agent
 
@@ -192,3 +193,13 @@ def train(epochs, env, agents, algorithm, iteractive=False):
         # agent_eval.q = copy.deepcopy(agent1.q)
         n_steps_trained.append(run_trained(agents_eval, env_test, algorithm))
         lines = plot_graphs3(n_steps, n_eps, n_steps_trained, lines, iteractive=iteractive)
+
+    # Save Informations after running
+    with open(os.path.join('.', 'history', env.name + '.txt'), 'a') as file:
+        for trajectory in env.trajectories:
+            file.write(trajectory)
+
+    with open(os.path.join('.', 'history', env_test.name + '.txt'), 'a') as file:
+        for trajectory in env_test.trajectories:
+            file.write(trajectory)
+    plt.savefig(os.path.join('.', 'fig', env.name + '.png'))
