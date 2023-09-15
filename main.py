@@ -20,9 +20,10 @@ eps_decay = 200000.
 eps_min = 0.01
 eps_max = 1.
 
-plt.ion() # Turn interactive mode on.
-epochs = 500
-algorithm = 'iql'
+iteractive = False
+plt.ion() if iteractive else None # Turn iteractive mode on.
+epochs = 50
+algorithm = 'q-learning'
 print_li = False
 
 if algorithm == 'q-learning':
@@ -32,8 +33,8 @@ if algorithm == 'q-learning':
     file_name = 'single4'
     env = SpiderFly2D(spiders, flies, render_mode=render, size=state_len, max_steps=300, name=file_name)
     agent1 = Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=0.5, gamma=0.99)
-    train(epochs, env, (agent1, ), algorithm)
-    plt.savefig(os.path.join('.', 'fig', 'single_agent4.png'))
+    train(epochs, env, (agent1, ), algorithm, iteractive=iteractive)
+    plt.savefig(os.path.join('.', 'fig', 'single_agent5.png'))
 
 if algorithm == 'iql':
     ################################
@@ -43,5 +44,5 @@ if algorithm == 'iql':
     env = SpiderFly2D(spiders, flies, render_mode=render, size=state_len, max_steps=300, name=file_name)
     agents = (Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=0.5, gamma=0.99),
             Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=0.5, gamma=0.99))
-    train(epochs, env, agents, "iql")
+    train(epochs, env, agents, "iql", iteractive=iteractive)
     plt.savefig(os.path.join('.', 'fig', 'double_agent4.png'))

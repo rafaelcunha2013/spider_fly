@@ -28,7 +28,7 @@ def plot_graphs2(n_steps, n_eps, n_steps_trained, first):
     plt.pause(0.01)
     # print(agent1.q)
 
-def plot_graphs3(n_steps, n_eps, n_steps_trained, lines):
+def plot_graphs3(n_steps, n_eps, n_steps_trained, lines, iteractive=False):
     lines[0].set_data(np.arange(len(n_steps)), n_steps)
     lines[1].set_data(np.arange(len(n_steps_trained)), n_steps_trained)
     lines[2].set_data(np.arange(len(n_eps)), n_eps)
@@ -38,7 +38,7 @@ def plot_graphs3(n_steps, n_eps, n_steps_trained, lines):
         line.axes.autoscale_view()
 
     plt.draw()
-    plt.pause(0.01)
+    plt.pause(0.01) if iteractive else False
 
     return lines
 
@@ -132,7 +132,7 @@ def compute_transition(state, actions, reward, next_state, terminated, algorithm
         # transition2 = state, int(action[1] + 1), reward, next_state, terminated
         return transitions #(transition1, transition2)
 
-def train(epochs, env, agents, algorithm):
+def train(epochs, env, agents, algorithm, iteractive=False):
     n_steps = []
     n_eps = []
     n_steps_trained = []
@@ -191,4 +191,4 @@ def train(epochs, env, agents, algorithm):
 
         # agent_eval.q = copy.deepcopy(agent1.q)
         n_steps_trained.append(run_trained(agents_eval, env_test, algorithm))
-        lines = plot_graphs3(n_steps, n_eps, n_steps_trained, lines)
+        lines = plot_graphs3(n_steps, n_eps, n_steps_trained, lines, iteractive=iteractive)
