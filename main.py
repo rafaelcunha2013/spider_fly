@@ -18,11 +18,13 @@ action_len = 3
 eps_decay = 200000.
 eps_min = 0.01
 eps_max = 1.
+lr = 1e-3
+gamma = 0.99
 
 render = True
 iteractive = False
 print_li = False
-epochs = 500
+epochs = 50000
 algorithm = 'iql'
 
 
@@ -36,16 +38,16 @@ file_name = f'{algorithm}_{unique_id}_'
 
 if algorithm == 'q-learning':
     spiders = (Spider(round(state_len/2), 'Sp1'), )
-    agents = (Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=0.5, gamma=0.99), )
+    agents = (Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=lr, gamma=gamma), )
 
 if algorithm == 'iql':
     ################################
     ###### Double agent ############
     spiders = (Spider(round(state_len/2), 'Sp1'), Spider(round(state_len/2) + 1, 'Sp2'))
-    agents = (Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=0.5, gamma=0.99),
-            Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=0.5, gamma=0.99))
+    agents = (Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=lr, gamma=gamma),
+            Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=lr, gamma=gamma))
 
-env = SpiderFly2D(spiders, flies, render_mode=render, size=state_len, max_steps=300, name=file_name)
+env = SpiderFly2D(spiders, flies, render_mode=render, size=state_len, max_steps=300, name=file_name, print_li=print_li)
 train(epochs, env, agents, algorithm, iteractive=iteractive)
 
 end_time = time.time()

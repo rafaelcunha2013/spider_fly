@@ -43,14 +43,14 @@ def plot_graphs3(n_steps, n_eps, n_steps_trained, lines, iteractive=False):
 
     return lines
 
-def convert_old(state, env_length, env):
+def convert(state, env_length, env):
     fly_pos = env.fly_dict[str(state[0:2])]
     if fly_pos == 3:
         return 3 * env_length
     spider_pos = state[2]
     return int(fly_pos * env_length + spider_pos)
 
-def convert(state, env_length, env):
+def convert_new(state, env_length, env):
     fly_pos = env.fly_dict[str(state[0:2])]
     if fly_pos == 3:
         return 3 * env_length
@@ -146,6 +146,7 @@ def train(epochs, env, agents, algorithm, iteractive=False):
 
     env_test = copy.deepcopy(env)
     env_test.name = env.name + 'trained'
+    env_test.max_steps = 30
 
     # agent1 = agents[0]
     agents_eval = [Agent(agent.state_len, agent.action_len, agent.eps_decay, eps_min=0., eps_max=0.) for agent in agents]

@@ -15,7 +15,8 @@ class Agent:
 
         self.epsilon = eps_max
         self.episode = 0
-        self.q = np.zeros((state_len * 3 - 4, action_len), dtype=float)
+        # self.q = np.zeros((state_len * 3 - 4, action_len), dtype=float) # Memmory eficient version
+        self.q = np.zeros((state_len * 3, action_len), dtype=float)
 
     def select_action(self, state):
 
