@@ -51,5 +51,5 @@ env = SpiderFly2D(spiders, flies, render_mode=render, size=state_len, max_steps=
 train(epochs, env, agents, algorithm, iteractive=iteractive)
 
 end_time = time.time()
-elapsed_time = end_time - start_time
-print(f"Elapsed time: {elapsed_time} seconds")
+elapsed_time = round((end_time - start_time)/60, 2)
+print(f"Elapsed time: {elapsed_time} minutes")
