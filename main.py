@@ -19,12 +19,12 @@ eps_decay = 200000.
 eps_min = 0.01
 eps_max = 1.
 lr = 1e-3
-gamma = 0.99
+gamma = 0.9
 
 render = True
 iteractive = False
 print_li = False
-epochs = 50000
+epochs = 500000
 algorithm = 'iql'
 
 
