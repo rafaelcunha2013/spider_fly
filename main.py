@@ -8,30 +8,33 @@ import matplotlib.pyplot as plt
 import copy
 import os
 from datetime import datetime
+import time
 
+start_time = time.time()
 ################################
 ### Main parameters ############
 state_len = 6
-fly1 = Fly(0, 'F1 ')
-fly2 = Fly(state_len-1, 'F2 ')
-flies = (fly1, fly2)
-render = True
 action_len = 3
 eps_decay = 200000.
 eps_min = 0.01
 eps_max = 1.
 
+render = True
 iteractive = False
-plt.ion() if iteractive else None # Turn iteractive mode on.
-epochs = 50
-algorithm = 'q-learning'
 print_li = False
+epochs = 500
+algorithm = 'iql'
+
+
+#####################################################
+fly1 = Fly(0, 'F1 ')
+fly2 = Fly(state_len-1, 'F2 ')
+flies = (fly1, fly2)
+plt.ion() if iteractive else None # Turn iteractive mode on.
 unique_id = datetime.now().strftime("%m_%d__%H_%M_%S__%f")[:-4]
 file_name = f'{algorithm}_{unique_id}_' 
 
 if algorithm == 'q-learning':
-    ################################
-    ### Environment parameters #####
     spiders = (Spider(round(state_len/2), 'Sp1'), )
     agents = (Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=0.5, gamma=0.99), )
 
@@ -45,8 +48,6 @@ if algorithm == 'iql':
 env = SpiderFly2D(spiders, flies, render_mode=render, size=state_len, max_steps=300, name=file_name)
 train(epochs, env, agents, algorithm, iteractive=iteractive)
 
-# # Save Informations after running
-# with open(os.path.join('.', 'history', file_name + '.txt'), 'a') as file:
-#     for trajectory in env.trajectories:
-#         file.write(trajectory)
-# plt.savefig(os.path.join('.', 'fig', file_name + '.png'))
+end_time = time.time()
+elapsed_time = end_time - start_time
+print(f"Elapsed time: {elapsed_time} seconds")
