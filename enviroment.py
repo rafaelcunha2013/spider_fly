@@ -39,11 +39,11 @@ class SpiderFly2D:
     def update_state(self):
         i = 0
         for fly in self.flies:
-            self.state[i] = fly.position if not fly.captured else -1
+            self.state[i] = copy.deepcopy(fly.position) if not fly.captured else -1
             i += 1
 
         for spider in self.spiders:
-            self.state[i] = spider.position
+            self.state[i] = copy.deepcopy(spider.position)
             i += 1
 
 

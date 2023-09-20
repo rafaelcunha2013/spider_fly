@@ -102,6 +102,17 @@ def compute_action(state, agents, algorithm, env):
 
         return actions
 
+    if algorithm == "iql_fo":
+        flies_position = state[:2]
+        unified_spider_position = state[2] + state[3] * env.size
+        actions = []
+        for agent in agents:
+            state = np.append(flies_position, unified_spider_position)
+            state = convert(state, agents[0].state_len, env)
+            actions.append(agent.select_action(state))
+
+        return actions
+    
 
 def compute_transition(state, actions, reward, next_state, terminated, algorithm, agents, env):
     if algorithm == "q-learning":
@@ -124,6 +135,24 @@ def compute_transition(state, actions, reward, next_state, terminated, algorithm
             transitions.append(transition)
         # transition2 = state, int(action[1] + 1), reward, next_state, terminated
         return transitions #(transition1, transition2)
+    
+    if algorithm == "iql_fo":
+        flies_position_st = state[:2]
+        unified_spider_position = state[2] + state[3] * env.size
+        flies_position_next_st = next_state[:2]
+        next_unified_spider_position = next_state[2] + next_state[3] * env.size
+        
+        state = np.append(flies_position_st, unified_spider_position)
+        state = convert(state, agents[0].state_len, env)
+        next_state = np.append(flies_position_next_st, next_unified_spider_position)
+        next_state = convert(next_state, agents[0].state_len, env)
+        transitions = []
+
+        for action in actions:
+            transition = state, int(action + 1), reward, next_state, terminated
+            transitions.append(transition)
+
+        return transitions
 
 def train(epochs, env, agents, algorithm, iteractive=False):
     n_steps = []
@@ -154,7 +183,7 @@ def train(epochs, env, agents, algorithm, iteractive=False):
         while not terminated and not truncated:
             
             action = compute_action(state, agents, algorithm, env)
-            next_state, reward, terminated, truncated, _ = env.step(action)
+            next_state, reward, terminated, truncated, _ = copy.deepcopy(env.step(action))
             transitions = compute_transition(state, action, reward, next_state, terminated, algorithm, agents, env)
 
             for agent, transition in zip(agents, transitions):
