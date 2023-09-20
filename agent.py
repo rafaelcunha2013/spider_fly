@@ -36,8 +36,6 @@ class Agent:
     def update_q(self, transitions):
         state, action, reward, next_state, done = transitions
 
-        #if reward:
-            #print(reward)
         if done:
             self.q[state, action] += self.lr * (reward - self.q[state, action])
         else:
@@ -48,14 +46,7 @@ class Agent:
         self.episode += 1
 
 
-if __name__ == '__main__':
-    state_len = 4
-    action_len = 3
-    eps_decay = 100.
-    eps_min = 0.01
-    eps_max = 1.
-    agent1 = Agent(state_len, action_len, eps_decay, eps_min, eps_max)
-    agent2 = Agent(state_len, action_len, eps_decay, eps_min, eps_max)
+
 
 
 

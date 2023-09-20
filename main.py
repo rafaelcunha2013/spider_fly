@@ -46,6 +46,11 @@ if algorithm == 'iql':
     spiders = (Spider(round(state_len/2), 'Sp1'), Spider(round(state_len/2) + 1, 'Sp2'))
     agents = (Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=lr, gamma=gamma),
             Agent(state_len, action_len, eps_decay, eps_min, eps_max, lr=lr, gamma=gamma))
+    
+if algorithm == 'iql_fo':
+    spiders = (Spider(round(state_len/2), 'Sp1'), Spider(round(state_len/2) + 1, 'Sp2'))
+    agents = (Agent(state_len ** 2, action_len, eps_decay, eps_min, eps_max, lr=lr, gamma=gamma),
+            Agent(state_len ** 2, action_len, eps_decay, eps_min, eps_max, lr=lr, gamma=gamma))
 
 env = SpiderFly2D(spiders, flies, render_mode=render, size=state_len, max_steps=300, name=file_name, print_li=print_li)
 train(epochs, env, agents, algorithm, iteractive=iteractive)

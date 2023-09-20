@@ -65,11 +65,9 @@ def convert_new(state, env_length, env):
 def run_trained(agent, env_test, algorithm):
     epochs = 1
     n_steps = []
-    # agent.epsilon = 0
     for _ in range(epochs):
 
         state, _ = env_test.reset()
-        # state = convert(state, agent[0].state_len, env_test)
         if env_test.render_mode:
             env_test.render()
 
@@ -78,19 +76,13 @@ def run_trained(agent, env_test, algorithm):
 
         while not terminated and not truncated:
             
-            # action1 = agent.select_action(state)
             action = compute_action(state, agent, algorithm, env_test)
-
-            # action = (action1,)
             next_state, reward, terminated, truncated, _ = env_test.step(action)
-            # next_state = convert(next_state, agent[0].state_len, env_test)
-
             state = next_state.copy()
 
             if env_test.render_mode:
                 env_test.render()
 
-        #n_steps.append(env.steps)
 
     return env_test.steps
 
@@ -148,16 +140,11 @@ def train(epochs, env, agents, algorithm, iteractive=False):
     env_test.name = env.name + 'trained'
     env_test.max_steps = 15
 
-    # agent1 = agents[0]
     agents_eval = [Agent(agent.state_len, agent.action_len, agent.eps_decay, eps_min=0., eps_max=0.) for agent in agents]
 
     for _ in range(epochs):
-        # cum_rew = 0
-
         state, _ = env.reset()
-        # state = convert(state, agents[0].state_len, env)
 
-        # print(state)
         if env.render_mode:
             env.render()
 
@@ -167,19 +154,14 @@ def train(epochs, env, agents, algorithm, iteractive=False):
         while not terminated and not truncated:
             
             action = compute_action(state, agents, algorithm, env)
-
             next_state, reward, terminated, truncated, _ = env.step(action)
-            # next_state = convert(next_state, agents[0].state_len, env)
-
             transitions = compute_transition(state, action, reward, next_state, terminated, algorithm, agents, env)
 
             for agent, transition in zip(agents, transitions):
                 agent.update_q(transition)
 
-
             state = next_state.copy()
-            #cum_rew += reward
-            # print(next_state)
+
             if env.render_mode:
                 env.render()
         
@@ -191,7 +173,6 @@ def train(epochs, env, agents, algorithm, iteractive=False):
         n_steps.append(env.steps)
         n_eps.append(agents[0].epsilon)
 
-        # agent_eval.q = copy.deepcopy(agent1.q)
         n_steps_trained.append(run_trained(agents_eval, env_test, algorithm))
         lines = plot_graphs3(n_steps, n_eps, n_steps_trained, lines, iteractive=iteractive)
 
