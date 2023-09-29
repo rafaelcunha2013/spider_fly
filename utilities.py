@@ -149,7 +149,7 @@ def train(epochs, env, agents, algorithm, iteractive=False):
     agents_eval = [Agent(agent.state_len, agent.action_len, agent.eps_decay, eps_min=0., eps_max=0.) for agent in agents]
 
     for _ in range(epochs):
-        state, _ = copy.deepcopy(env.reset())
+        state, _ = env.reset()
 
         if env.render_mode:
             env.render()
@@ -159,13 +159,13 @@ def train(epochs, env, agents, algorithm, iteractive=False):
 
         while not terminated and not truncated:           
             action = compute_action(state, agents, algorithm, env)
-            next_state, reward, terminated, truncated, _ = copy.deepcopy(env.step(action))
+            next_state, reward, terminated, truncated, _ = env.step(action)
             transitions = compute_transition(state, action, reward, next_state, terminated, algorithm, agents, env)
 
             for agent, transition in zip(agents, transitions):
                 agent.update_q(transition)
 
-            state = next_state.copy()
+            state = next_state
 
             if env.render_mode:
                 env.render()
