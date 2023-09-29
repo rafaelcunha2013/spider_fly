@@ -43,7 +43,6 @@ def convert_new(state, env_length, env):
 
 def run_trained(agent, env_test, algorithm):
     epochs = 1
-    n_steps = []
     for _ in range(epochs):
 
         state, _ = env_test.reset()
@@ -56,7 +55,7 @@ def run_trained(agent, env_test, algorithm):
         while not terminated and not truncated:
             
             action = compute_action(state, agent, algorithm, env_test)
-            next_state, reward, terminated, truncated, _ = env_test.step(action)
+            next_state, _ , terminated, truncated, _ = env_test.step(action)
             state = next_state.copy()
 
             if env_test.render_mode:
@@ -144,13 +143,13 @@ def train(epochs, env, agents, algorithm, iteractive=False):
     lines = [ax.plot([], [])[0] for ax in axs]
 
     env_test = copy.deepcopy(env)
-    env_test.name = env.name + 'trained'
+    env_test.name = f"{env.name}trained"
     env_test.max_steps = 15
 
     agents_eval = [Agent(agent.state_len, agent.action_len, agent.eps_decay, eps_min=0., eps_max=0.) for agent in agents]
 
     for _ in range(epochs):
-        state, _ = env.reset()
+        state, _ = copy.deepcopy(env.reset())
 
         if env.render_mode:
             env.render()
@@ -158,8 +157,7 @@ def train(epochs, env, agents, algorithm, iteractive=False):
         terminated = False
         truncated = False
 
-        while not terminated and not truncated:
-            
+        while not terminated and not truncated:           
             action = compute_action(state, agents, algorithm, env)
             next_state, reward, terminated, truncated, _ = copy.deepcopy(env.step(action))
             transitions = compute_transition(state, action, reward, next_state, terminated, algorithm, agents, env)
