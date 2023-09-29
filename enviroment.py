@@ -46,7 +46,6 @@ class SpiderFly2D:
             self.state[i] = copy.deepcopy(spider.position)
             i += 1
 
-
     def reset(self):
         [fly.reset() for fly in self.flies]
         [spider.reset() for spider in self.spiders]

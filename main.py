@@ -24,8 +24,8 @@ gamma = 0.9
 render = True
 iteractive = False
 print_li = False
-epochs = 5000
-algorithm = 'iql_fo'
+epochs = 500
+algorithm = 'q-learning'
 
 
 #####################################################

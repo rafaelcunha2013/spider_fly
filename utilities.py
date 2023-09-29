@@ -61,7 +61,6 @@ def convert_new(state, env_length, env):
         converted_state = int(fly_pos * (env_length - 2) + spider_pos)
     return converted_state
 
-
 def run_trained(agent, env_test, algorithm):
     epochs = 1
     n_steps = []
@@ -113,7 +112,6 @@ def compute_action(state, agents, algorithm, env):
 
         return actions
     
-
 def compute_transition(state, actions, reward, next_state, terminated, algorithm, agents, env):
     if algorithm == "q-learning":
         state = convert(state, agents[0].state_len, env)
