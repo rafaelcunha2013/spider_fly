@@ -43,6 +43,10 @@ def plot_graphs3(n_steps, n_eps, n_steps_trained, lines, iteractive=False):
 
     return lines
 
+def write_trajectories_to_file(env, base_path='.'):
+    with open(os.path.join(base_path, 'history', f"{env.name}.txt"), 'a') as file:
+        file.writelines(env.trajectories)
+
 def convert(state, env_length, env):
     fly_pos = env.fly_dict[str(state[0:2])]
     if fly_pos == 3:
@@ -204,11 +208,8 @@ def train(epochs, env, agents, algorithm, iteractive=False):
         lines = plot_graphs3(n_steps, n_eps, n_steps_trained, lines, iteractive=iteractive)
 
     # Save Informations after running
-    with open(os.path.join('.', 'history', env.name + '.txt'), 'a') as file:
-        for trajectory in env.trajectories:
-            file.write(trajectory)
-
-    with open(os.path.join('.', 'history', env_test.name + '.txt'), 'a') as file:
-        for trajectory in env_test.trajectories:
-            file.write(trajectory)
+    write_trajectories_to_file(env)
+    write_trajectories_to_file(env_test)
     plt.savefig(os.path.join('.', 'fig', env.name + '.png'))
+
+
