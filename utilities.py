@@ -5,7 +5,7 @@ import os
 
 from agent import Agent
 
-def plot_graphs3(n_steps, n_eps, n_steps_trained, lines, iteractive=False):
+def plot_graphs(n_steps, n_eps, n_steps_trained, lines, iteractive=False):
     lines[0].set_data(np.arange(len(n_steps)), n_steps)
     lines[1].set_data(np.arange(len(n_steps_trained)), n_steps_trained)
     lines[2].set_data(np.arange(len(n_eps)), n_eps)
@@ -181,7 +181,7 @@ def train(epochs, env, agents, algorithm, iteractive=False):
         n_eps.append(agents[0].epsilon)
 
         n_steps_trained.append(run_trained(agents_eval, env_test, algorithm))
-        lines = plot_graphs3(n_steps, n_eps, n_steps_trained, lines, iteractive=iteractive)
+        lines = plot_graphs(n_steps, n_eps, n_steps_trained, lines, iteractive=iteractive)
 
     # Save Informations after running
     write_trajectories_to_file(env)
