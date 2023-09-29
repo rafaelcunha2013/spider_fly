@@ -5,30 +5,6 @@ import os
 
 from agent import Agent
 
-def plot_graphs(n_steps, n_eps, n_steps_trained):
-    plt.figure(1)
-    plt.plot(n_steps)
-    plt.figure(2)
-    plt.plot(n_eps)
-    plt.figure(3)
-    plt.plot(n_steps_trained)
-    plt.draw()
-    plt.pause(0.01)
-    # print(agent1.q)
-
-
-def plot_graphs2(n_steps, n_eps, n_steps_trained, first):
-    # Create a figure and a set of subplots
-    # if first:
-    fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
-    axs[0].plot(n_steps)
-    axs[1].plot(n_steps_trained)
-    axs[2].plot(n_eps)
-
-    plt.draw()
-    plt.pause(0.01)
-    # print(agent1.q)
-
 def plot_graphs3(n_steps, n_eps, n_steps_trained, lines, iteractive=False):
     lines[0].set_data(np.arange(len(n_steps)), n_steps)
     lines[1].set_data(np.arange(len(n_steps_trained)), n_steps_trained)
