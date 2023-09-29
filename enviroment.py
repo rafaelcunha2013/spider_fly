@@ -56,7 +56,9 @@ class SpiderFly2D:
 
         self.trajectories.append("\n\n")
 
-        return self.state, {}
+        state = copy.deepcopy(self.state)
+
+        return state, {}
     
     def step(self, action):
         reward = 0
@@ -80,8 +82,8 @@ class SpiderFly2D:
         self.steps += 1
         truncated = True if (self.steps == self.max_steps and not terminated) else False
 
-
-        return self.state, reward, terminated, truncated, {}
+        state = copy.deepcopy(self.state)
+        return state, reward, terminated, truncated, {}
 
     def render(self):
         self.trajectories.append('   '.join(self.grid) + "\n")
