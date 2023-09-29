@@ -184,6 +184,9 @@ def train(epochs, env, agents, algorithm, iteractive=False):
     # Save Informations after running
     write_trajectories_to_file(env)
     write_trajectories_to_file(env_test)
-    plt.savefig(os.path.join('.', 'fig', env.name + '.png'))
+    plt.savefig(os.path.join('.', 'fig', f"{env.name}.png"))
+    for idx, agent in enumerate(agents):
+        path = os.path.join('.', 'model', f"{env.name}_{idx}.npy")
+        np.save(path, agent.q)
 
 

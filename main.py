@@ -1,6 +1,6 @@
 from agent import Agent
 from enviroment import SpiderFly2D, Fly, Spider
-from utilities import convert, run_trained, plot_graphs3, train
+from utilities import convert, run_trained, plot_graphs, train
 
 
 import numpy as np
@@ -24,8 +24,8 @@ gamma = 0.9
 render = True
 iteractive = False
 print_li = False
-epochs = 500
-algorithm = 'q-learning'
+epochs = 5000
+algorithm = 'iql_fo'
 
 
 #####################################################
