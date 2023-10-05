@@ -144,7 +144,7 @@ def train(epochs, env, agents, algorithm, iteractive=False):
 
     env_test = copy.deepcopy(env)
     env_test.name = f"{env.name}trained"
-    env_test.max_steps = 15
+    env_test.max_steps = env.size * 4
 
     agents_eval = [Agent(agent.state_len, agent.action_len, agent.eps_decay, eps_min=0., eps_max=0.) for agent in agents]
 
