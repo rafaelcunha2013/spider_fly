@@ -4,3 +4,4 @@ desktop.ini
 *.txt
 utilities.cpython-310.pyc
 trash_main_trained.py
+*.npy
