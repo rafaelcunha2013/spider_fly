@@ -20,12 +20,13 @@ eps_min = 0.01
 eps_max = 1.
 lr = 1e-3
 gamma = 0.9
+max_steps = 300
 
 render = True
 iteractive = False
 print_li = False
-epochs = 5000
-algorithm = 'iql_fo'
+epochs = 500
+algorithm = 'q-learning'
 
 
 #####################################################
@@ -52,7 +53,7 @@ if algorithm == 'iql_fo':
     agents = (Agent(state_len ** 2, action_len, eps_decay, eps_min, eps_max, lr=lr, gamma=gamma),
             Agent(state_len ** 2, action_len, eps_decay, eps_min, eps_max, lr=lr, gamma=gamma))
 
-env = SpiderFly2D(spiders, flies, render_mode=render, size=state_len, max_steps=300, name=file_name, print_li=print_li)
+env = SpiderFly2D(spiders, flies, render_mode=render, size=state_len, max_steps=max_steps, name=file_name, print_li=print_li)
 train(epochs, env, agents, algorithm, iteractive=iteractive)
 
 end_time = time.time()
